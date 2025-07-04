@@ -1,0 +1,48 @@
+$primary: #6c757d;
+body {
+  font-family: system-ui, sans-serif;
+  background-color: #f8f9fa;
+  color: $primary;
+}
+
+.recipe-post {
+  h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .meta p {
+    margin-bottom: 0.25rem;
+  }
+
+  .recipe-content {
+    margin-top: 2rem;
+  
+    table {
+      margin-top: 1.5rem;
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 0.5rem;
+    }
+  
+    thead {
+      background-color: #f8f9fa;
+    }
+  }
+}
+
+.recipe-list {
+  li {
+    border-bottom: 1px solid #dee2e6 !important;
+    padding-bottom: 1rem !important;
+    margin-bottom: 1rem !important; 
+  }
+}
+
+li.mb-4 {
+  outline: 2px solid hotpink !important;
+}
