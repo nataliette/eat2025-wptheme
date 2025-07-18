@@ -1,0 +1,21 @@
+# OS and IDE files
+.DS_Store
+.vscode/
+.vscodium/
+
+# Node
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Sass
+.sass-cache/
+*.css.map
+
+# Build artifacts
+/dist/
+/build/
+
+# Other
+.env

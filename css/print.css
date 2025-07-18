@@ -1,0 +1,80 @@
+@media print {
+    /* Remove non-print elements */
+    .unit-toggle,
+    .yield-toggle,
+    .btn-group,
+    nav,
+    footer,
+    .site-header,
+    .print-hide {
+      display: none !important;
+    }
+  
+    /* Body font scale */
+    body {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+  
+    /* Reduce page margin */
+    @page {
+      margin: 1cm;
+    }
+  
+    /* Typography tweaks */
+    h1 {
+      font-size: 1.4rem;
+      margin-bottom: 0.5rem;
+    }
+  
+    h2, h3, h4 {
+      font-size: 1.1rem;
+      margin-top: 1rem;
+      margin-bottom: 0.4rem;
+    }
+  
+    .recipe-ingredients label {
+      font-size: 1em;
+    }
+  
+    .ingredient-list li {
+      margin-bottom: 0.25rem;
+    }
+  
+    /* Optional: remove checkboxes */
+    input[type="checkbox"] {
+      display: none;
+    }
+
+
+
+    .print-recipe-columns {
+        display: flex;
+        flex-direction: row;
+        gap: 2rem;
+    }
+
+    .print-recipe-columns > div {
+        flex: 1;
+        width: 50%;
+    }
+
+    h2 {
+        font-size: 1.1rem;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+    }
+
+    ol, ul {
+        padding-left: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .ingredient-list li {
+        margin-bottom: 0.3rem;
+    }
+
+    .recipe-ingredients input[type="checkbox"] {
+        display: none;
+    }
+  }

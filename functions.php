@@ -6,6 +6,11 @@ function natalie_recipes_enqueue_assets() {
 }
 add_action('wp_enqueue_scripts', 'natalie_recipes_enqueue_assets');
 
+function eat2025_print_styles() {
+  wp_enqueue_style('print-style', get_template_directory_uri() . '/css/print.css', [], null, 'print');
+}
+add_action('wp_enqueue_scripts', 'eat2025_print_styles');
+
 function eat2025_register_custom_taxonomies() {
 
     register_taxonomy('cuisine', 'post', [
@@ -41,6 +46,20 @@ function eat2025_register_custom_taxonomies() {
     ]);
   }
   add_action('init', 'eat2025_register_custom_taxonomies');
+
+
+  function eat2025_enqueue_recipe_scripts() {
+    if (is_single()) {
+      wp_enqueue_script(
+        'recipe-scaler',
+        get_template_directory_uri() . '/js/recipe-scaler.js',
+        [],
+        null,
+        true // Load in footer
+      );
+    }
+  }
+  add_action('wp_enqueue_scripts', 'eat2025_enqueue_recipe_scripts');
 
 ?>
 
