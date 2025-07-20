@@ -1,3 +1,10 @@
+// Override Bootstrap variables before import
+$border-radius: 50rem;
+
+// Import Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+
 $primary: #6c757d;
 body {
   font-family: system-ui, sans-serif;
@@ -66,3 +73,60 @@ li.mb-4 {
     }
   }
 }
+
+.recipe-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+
+/* Recipe Meta */
+.recipe-meta .badge {
+  border: 1px solid black !important;
+  color: black;
+}
+
+/* Ingredients */
+
+.recipe-ingredients ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.recipe-ingredients li label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.recipe-ingredients ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.recipe-ingredients li label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #212529;
+}
+
+
+/* Convert toggles to rounded pills */
+.btn-group .btn {
+  border-radius: 0; // default all flat
+}
+
+.btn-group .btn:first-of-type {
+  border-top-left-radius: 999px;
+  border-bottom-left-radius: 999px;
+}
+
+.btn-group .btn:last-of-type {
+  border-top-right-radius: 999px;
+  border-bottom-right-radius: 999px;
+}
+
+
+
