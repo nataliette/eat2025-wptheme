@@ -1,132 +1,130 @@
+// Set Outfit as base font family
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+// Set base font family and weight
+$font-family-sans-serif: 'Outfit', sans-serif;
+$font-family-base: $font-family-sans-serif;
+
+$font-weight-normal: 200;
+$font-weight-bold: 600;
+
+$headings-font-weight: 900; // h1–h6
+
+// Optional: Set heading font family same as body
+$headings-font-family: $font-family-sans-serif;
+
+// Set button font weight
+$btn-font-weight: 500;
+
 // Override Bootstrap variables before import
-$border-radius: 50rem;
+$border-radius: 1rem;
+
+// Set border color to black
+$border-color: #000;
+
+// Set text color to black
+$body-color: #000;
+$text-color: #000; // optional fallback if used elsewhere
+
+// Replace all default blues with black
+$primary: #000;
+$link-color: #000;
+$link-hover-color: #000;
+$border-color: #000;
+$body-color: #000;
+$btn-link-color: #000;
+$btn-link-hover-color: #000;
+$input-focus-border-color: #000;
+$form-check-input-checked-bg-color: #000;
+$form-check-input-checked-border-color: #000;
+$component-active-bg: #000;
+$component-active-color: #fff;
+$focus-ring-color: rgba(0, 0, 0, 0.25); // Optional: black focus ring
 
 // Import Bootstrap
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 
-$primary: #6c757d;
-body {
-  font-family: system-ui, sans-serif;
-  background-color: #f8f9fa;
-  color: $primary;
-}
-
-.recipe-post {
-  h1 {
-    font-size: 2.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .meta p {
-    margin-bottom: 0.25rem;
-  }
-
-  .recipe-content {
-    margin-top: 2rem;
-  
-    table {
-      margin-top: 1.5rem;
-      width: 100%;
-      border-collapse: collapse;
-    }
-  
-    th, td {
-      border: 1px solid #dee2e6;
-      padding: 0.5rem;
-    }
-  
-    thead {
-      background-color: #f8f9fa;
-    }
-  }
-}
-
-.recipe-list {
-  li {
-    border-bottom: 1px solid #dee2e6 !important;
-    padding-bottom: 1rem !important;
-    margin-bottom: 1rem !important; 
-  }
-}
-
-li.mb-4 {
-  outline: 2px solid hotpink !important;
-}
 
 
-.ingredient-list {
-  list-style: none;
-  padding-left: 0;
-
-  li {
-    margin-bottom: 0.5em;
-    label {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5em;
-    }
-
-    &.optional {
-      font-style: italic;
-      color: #6b7280; // Tailwind gray-500
-    }
-  }
-}
-
-.recipe-title {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-}
 
 
 /* Recipe Meta */
 .recipe-meta .badge {
-  border: 1px solid black !important;
   color: black;
 }
 
 /* Ingredients */
 
-.recipe-ingredients ul {
-  padding-left: 0;
-  list-style: none;
-}
+// Convert toggles to rounded pills
 
-.recipe-ingredients li label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+.unit-yield-toggles {
+  
+    .btn-group .btn {
+      border-radius: 0; // default all flat
+    }
+    
+    .btn-group .btn:first-of-type {
+      border-top-left-radius: 999px;
+      border-bottom-left-radius: 999px;
+    }
+    
+    .btn-group .btn:last-of-type {
+      border-top-right-radius: 999px;
+      border-bottom-right-radius: 999px;
+    }
 
-.recipe-ingredients ul {
-  list-style: none;
-  padding-left: 0;
-}
-
-.recipe-ingredients li label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #212529;
 }
 
 
-/* Convert toggles to rounded pills */
-.btn-group .btn {
-  border-radius: 0; // default all flat
+/* Nutrition Facts */
+
+// Servings block (above nutrition rows)
+.fda-servings {
+  width: 100%;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+
+  .label {
+    text-transform: uppercase;
+    text-align: left;
+  }
+
+  .value {
+    text-align: right;
+  }
 }
 
-.btn-group .btn:first-of-type {
-  border-top-left-radius: 999px;
-  border-bottom-left-radius: 999px;
+// Nutrition block
+.fda-table {
+  border-top: 8px solid black;
+  margin-bottom: 0.5rem;
 }
+.nutrition-label-fda {
+  border: 2px solid #000;
+  padding: 1rem;
+  margin: 2rem 0;
 
-.btn-group .btn:last-of-type {
-  border-top-right-radius: 999px;
-  border-bottom-right-radius: 999px;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+      text-align: left;
+      text-transform: uppercase;
+      font-weight: $font-weight-bold;
+    }
+
+    td {
+      text-align: right;
+      font-weight: $font-weight-normal;
+    }
+
+    .small-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      text-align: right;
+    }
+  }
 }
-
-
-

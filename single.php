@@ -4,8 +4,8 @@
   <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <article <?php post_class(); ?>>
-
-      <div class="row gx-5">
+    
+      <section class="row gx-5">
         <div class="col-md-6">
           <h1 class="mb-2"><?php the_title(); ?></h1>
 
@@ -36,22 +36,52 @@
               }
             ?>
             <li class="badge rounded-pill border py-2 px-3"><i class="bi bi-clock"></i> <?php echo format_minutes_to_duration($total); ?></li>
-            <li class="badge rounded-pill border py-2 px-3"><i class="bi bi-measuring-cup"></i> <?= esc_html(get_field('yield')); ?></li>
-            <li class="badge rounded-pill border py-2 px-3"><i class="bi bi-egg-fried"></i> <?= get_the_term_list(get_the_ID(), 'meal', '', ', '); ?></li>
-            <?php
-              $diets = get_the_terms(get_the_ID(), 'diet');
-              if ($diets) {
-                foreach ($diets as $term) {
-                  echo '<li class="badge rounded-pill border py-2 px-3"><i class="bi bi-fork-knife"></i> ' . esc_html($term->name) . '</li>';
-                }
-              }
 
-              $cuisines = get_the_terms(get_the_ID(), 'cuisine');
-              if ($cuisines) {
-                foreach ($cuisines as $term) {
-                  echo '<li class="badge rounded-pill border py-2 px-3"><i class="bi bi-globe-americas"></i> ' . esc_html($term->name) . '</li>';
+            <li class="badge rounded-pill border py-2 px-3"><i class="bi bi-measuring-cup"></i> <?= esc_html(get_field('yield')); ?> servings</li>
+
+            <?php
+            $meals = get_the_terms(get_the_ID(), 'meal');
+            if ($meals && !is_wp_error($meals)) {
+              echo '<li class="badge rounded-pill border py-2 px-3">
+                      <i class="bi bi-egg-fried"></i> ';
+              $meal_links = [];
+              foreach ($meals as $term) {
+                $link = get_term_link($term);
+                if (!is_wp_error($link)) {
+                  $meal_links[] = '<a href="' . esc_url($link) . '" class="text-decoration-none">' . esc_html($term->name) . '</a>';
                 }
               }
+              echo implode(', ', $meal_links);
+              echo '</li>';
+            }
+            $diets = get_the_terms(get_the_ID(), 'diet');
+            if ($diets && !is_wp_error($diets)) {
+              echo '<li class="badge rounded-pill border py-2 px-3">
+                      <i class="bi bi-fork-knife"></i> ';
+              $diet_links = [];
+              foreach ($diets as $term) {
+                $link = get_term_link($term);
+                if (!is_wp_error($link)) {
+                  $diet_links[] = '<a href="' . esc_url($link) . '" class="text-decoration-none">' . esc_html($term->name) . '</a>';
+                }
+              }
+              echo implode(', ', $diet_links);
+              echo '</li>';
+            }
+            $cuisines = get_the_terms(get_the_ID(), 'cuisine');
+            if ($cuisines && !is_wp_error($cuisines)) {
+              echo '<li class="badge rounded-pill border py-2 px-3">
+                      <i class="bi bi-globe-americas"></i> ';
+              $cuisine_links = [];
+              foreach ($cuisines as $term) {
+                $link = get_term_link($term);
+                if (!is_wp_error($link)) {
+                  $cuisine_links[] = '<a href="' . esc_url($link) . '" class="text-decoration-none">' . esc_html($term->name) . '</a>';
+                }
+              }
+              echo implode(', ', $cuisine_links);
+              echo '</li>';
+            }
             ?>
           </ul>
 
@@ -61,7 +91,7 @@
               <h2>Ingredients</h2>
 
               <!-- Units & Yield Toggle -->
-              <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
+              <div class="d-flex flex-wrap align-items-center gap-3 mb-3 unit-yield-toggles">
                 <div class="d-flex align-items-center gap-2">
                   <span class="fw-semibold">Units:</span>
                   <div class="btn-group" role="group" aria-label="Units">
@@ -111,8 +141,8 @@
                             <span class="ingredient-amount"><?= esc_html($amount); ?></span>
                             <span class="ingredient-unit"><?= esc_html($unit); ?></span>
                             <?= esc_html($ingredient); ?>
-                            <?php if ($prep): ?>, <?= esc_html($prep); ?><?php endif; ?>
-                            <?php if ($optional): ?> <em>(optional)</em><?php endif; ?>
+                            <?php if ($prep): ?> <small class="text-muted"><?= esc_html($prep); ?></small><?php endif; ?>
+                            <?php if ($optional): ?> <small class="text-muted">(optional)</small><?php endif; ?>
                           </span>
                         </label>
                       </li>
@@ -139,19 +169,98 @@
               <?= apply_filters('the_content', get_field('notes')); ?>
             </div>
           <?php endif; ?>
+          
 
-          <?php if ($nutrition = get_field('nutrition_info')): ?>
-            <section class="mb-4">
-              <h2>Nutrition Information</h2>
-              <?php echo apply_filters('the_content', $nutrition); ?>
-            </section>
-          <?php endif; ?>
+          <?php
+          $servings = get_field('yield') ?: 1;
+          $serving_size = get_field('serving_size');
+          $nutrition = get_field('nutrition_info');
+
+          // Extract and format serving size
+          $amount = $serving_size['amount'] ?? '';
+          $unit   = $serving_size['unit'] ?? '';
+          $unit_plural_map = [
+              'cup' => 'cups',
+              'slice' => 'slices',
+              'piece' => 'pieces',
+          ];
+
+          $fixed_units = ['g', 'ml', 'tbsp'];
+
+          if ($amount && $unit) {
+              if (in_array($unit, $fixed_units)) {
+                  $serving_label = $amount . ' ' . strtoupper($unit);
+              } else {
+                  $unit_label = ($amount == 1) ? $unit : ($unit_plural_map[$unit] ?? $unit . 's');
+                  $serving_label = $amount . ' ' . $unit_label;
+              }
+          } else {
+              $serving_label = '';
+          }
+
+          // Nutrition values
+          $calories = $nutrition['calories'] ?? 0;
+          $protein  = $nutrition['protein'] ?? 0;
+          $carbs    = $nutrition['carbs'] ?? 0;
+          $fat      = $nutrition['fat'] ?? 0;
+
+          // Totals
+          $calories_total = $calories * $servings;
+          $protein_total  = $protein * $servings;
+          $carbs_total    = $carbs * $servings;
+          $fat_total      = $fat * $servings;
+          ?>
+
+          <div class="nutrition-label-fda">
+              <h4 class="label-title">Nutrition Facts</h4>
+              <table class="fda-servings">
+                  <tr>
+                      <td class="label">Servings Per Recipe</td>
+                      <td class="value"><?= esc_html($servings); ?> servings</td>
+                  </tr>
+                  <?php if ($serving_label): ?>
+                  <tr>
+                      <td class="label">Serving Size</td>
+                      <td class="value"><?= esc_html($serving_label); ?></td>
+                  </tr>
+                  <?php endif; ?>
+              </table>
+
+              <table class="fda-table">
+                  <thead>
+                      <tr class="subhead">
+                          <th></th>
+                          <th class="small-label">Per serving</th>
+                          <th class="small-label">Per recipe</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr class="border-top-bold">
+                          <th>CALORIES</th>
+                          <td><?= round($calories); ?> kcal</td>
+                          <td><?= round($calories_total); ?> kcal</td>
+                      </tr>
+                      <tr class="border-top">
+                          <th>PROTEIN</th>
+                          <td><?= round($protein); ?> g</td>
+                          <td><?= round($protein_total); ?> g</td>
+                      </tr>
+                      <tr>
+                          <th>CARBOHYDRATES</th>
+                          <td><?= round($carbs); ?> g</td>
+                          <td><?= round($carbs_total); ?> g</td>
+                      </tr>
+                      <tr>
+                          <th>FAT</th>
+                          <td><?= round($fat); ?> g</td>
+                          <td><?= round($fat_total); ?> g</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
 
         </div>
-      </div>
-
-      <footer class="mt-5">
-      </footer>
+      </section>
 
     </article>
 

@@ -67,5 +67,6 @@ function eat2025_register_custom_taxonomies() {
   }
   add_action('wp_enqueue_scripts', 'eat2025_enqueue_recipe_scripts');
 
+
 ?>
 
