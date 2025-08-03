@@ -19,26 +19,30 @@ $btn-font-weight: 500;
 $border-radius: 1rem;
 
 // Set border color to black
-$border-color: #000;
+$border-color: $black;
 
 // Set text color to black
-$body-color: #000;
-$text-color: #000; // optional fallback if used elsewhere
+$body-color: $black;
+$text-color: $black; // optional fallback if used elsewhere
 
 // Replace all default blues with black
-$primary: #000;
-$link-color: #000;
-$link-hover-color: #000;
-$border-color: #000;
-$body-color: #000;
-$btn-link-color: #000;
-$btn-link-hover-color: #000;
-$input-focus-border-color: #000;
-$form-check-input-checked-bg-color: #000;
-$form-check-input-checked-border-color: #000;
-$component-active-bg: #000;
+$primary: $black;
+$link-color: $black;
+$link-hover-color: $black;
+$border-color: $black;
+$body-color: $black;
+$btn-link-color: $black;
+$btn-link-hover-color: $black;
+$input-focus-border-color: $black;
+$form-check-input-checked-bg-color: $black;
+$form-check-input-checked-border-color: $black;
+$component-active-bg: $black;
 $component-active-color: #fff;
 $focus-ring-color: rgba(0, 0, 0, 0.25); // Optional: black focus ring
+
+// define new variable Silver for border color
+$silver: #c0c0c0;
+$border-color: #c0c0c0; // or $silver if you defined it
 
 // Import Bootstrap
 @import "../node_modules/bootstrap/scss/bootstrap";
@@ -50,7 +54,7 @@ $focus-ring-color: rgba(0, 0, 0, 0.25); // Optional: black focus ring
 
 /* Recipe Meta */
 .recipe-meta .badge {
-  color: black;
+  color: $black;
 }
 
 /* Ingredients */
@@ -76,6 +80,47 @@ $focus-ring-color: rgba(0, 0, 0, 0.25); // Optional: black focus ring
 }
 
 
+/* Method */
+.method {
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600; // Bold, not Black (900)
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+
+    // Always apply top border to first row
+    tr:first-child th,
+    tr:first-child td {
+      border-top: 1px solid $silver;
+    }
+  
+    th,
+    td {
+      padding: 0.5rem 0.75rem;
+      border: none;
+      border-bottom: 1px solid $silver; // black underline for all rows
+      border-top: none; // reset in case
+    }
+  
+    thead th {
+      background-color: $black;
+      color: #fff;
+      font-weight: 600;
+      text-align: left;
+    }
+  
+    tbody th {
+      background-color: $black;
+      color: #fff;
+      font-weight: 600;
+    }
+  }
+}
+
+
 /* Nutrition Facts */
 
 // Servings block (above nutrition rows)
@@ -97,11 +142,11 @@ $focus-ring-color: rgba(0, 0, 0, 0.25); // Optional: black focus ring
 
 // Nutrition block
 .fda-table {
-  border-top: 8px solid black;
+  border-top: 8px solid $black;
   margin-bottom: 0.5rem;
 }
 .nutrition-label-fda {
-  border: 2px solid #000;
+  border: 2px solid $black;
   padding: 1rem;
   margin: 2rem 0;
 

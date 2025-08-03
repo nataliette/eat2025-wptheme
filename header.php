@@ -6,8 +6,12 @@
   <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
-<header class="bg-light p-3">
+<header class="p-3">
   <div class="container">
-    <h1 class="mb-0"><?php bloginfo('name'); ?></h1>
+    <h1 class="mb-0">
+      <a href="<?php echo esc_url(home_url('/')); ?>" class="text-decoration-none text-dark">
+        <?php bloginfo('name'); ?>
+      </a>
+    </h1>
   </div>
 </header>

@@ -1,5 +1,6 @@
 @media print {
     /* Remove non-print elements */
+    .unit-yield-toggles,
     .unit-toggle,
     .yield-toggle,
     .btn-group,
@@ -12,25 +13,23 @@
   
     /* Body font scale */
     body {
-      font-size: 11px;
-      line-height: 1.5;
+      font-size: 10px;
+      line-height: 1.2;
     }
   
     /* Reduce page margin */
     @page {
-      margin: 1cm;
+      margin: 0.5em;
     }
   
     /* Typography tweaks */
     h1 {
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
     }
   
     h2, h3, h4 {
-      font-size: 1.1rem;
+      font-size: 1rem;
       margin-top: 1rem;
-      margin-bottom: 0.4rem;
     }
   
     .recipe-ingredients label {
@@ -51,12 +50,12 @@
     .print-recipe-columns {
         display: flex;
         flex-direction: row;
-        gap: 2rem;
+        gap: 1rem;
     }
 
     .print-recipe-columns > div {
         flex: 1;
-        width: 50%;
+        width: 40%;
     }
 
     h2 {

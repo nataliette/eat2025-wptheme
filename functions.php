@@ -1,5 +1,26 @@
 <?php 
 
+// Helper functions
+function decimal_to_fraction($value) {
+  $fractions = [
+    '0.25' => '¼',
+    '0.33' => '⅓',
+    '0.50' => '½',
+    '0.66' => '⅔',
+    '0.75' => '¾',
+  ];
+
+  $formatted = sprintf('%.2f', $value);
+
+  if (array_key_exists($formatted, $fractions)) {
+    return $fractions[$formatted];
+  }
+
+  return rtrim(rtrim(number_format($value, 2), '0'), '.'); // fallback
+}
+
+// Then your ACF hooks, actions, etc...
+
 function natalie_recipes_enqueue_assets() {
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css');
     wp_enqueue_style('eat2025-style', get_stylesheet_directory_uri() . '/style.css', [], filemtime(get_stylesheet_directory() . '/style.css'));
@@ -67,6 +88,6 @@ function eat2025_register_custom_taxonomies() {
   }
   add_action('wp_enqueue_scripts', 'eat2025_enqueue_recipe_scripts');
 
-
+  
 ?>
 

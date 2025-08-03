@@ -4,7 +4,7 @@
   <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
     <article <?php post_class(); ?>>
-    
+
       <section class="row gx-5">
         <div class="col-md-6">
           <h1 class="mb-2"><?php the_title(); ?></h1>
@@ -157,14 +157,14 @@
         <div class="col-md-6">
 
           <?php if ($method = get_field('method')): ?>
-            <section class="mb-4">
+            <section class="mb-4 method">
               <h2>Method</h2>
               <?php echo apply_filters('the_content', $method); ?>
             </section>
           <?php endif; ?>
 
           <?php if (get_field('notes')): ?>
-            <div class="border rounded p-3 bg-light mt-4">
+            <div class="border rounded p-3 mt-4">
               <h5 class="fw-semibold mb-2">Notes</h5>
               <?= apply_filters('the_content', get_field('notes')); ?>
             </div>
@@ -172,37 +172,40 @@
           
 
           <?php
-          $servings = get_field('yield') ?: 1;
+          $servings = floatval(get_field('yield')) ?: 1;
           $serving_size = get_field('serving_size');
           $nutrition = get_field('nutrition_info');
 
           // Extract and format serving size
-          $amount = $serving_size['amount'] ?? '';
+          $raw_amount = isset($serving_size['amount']) ? $serving_size['amount'] : 0;
+          $amount = decimal_to_fraction($raw_amount);
+
+          $unit_label = ''; // initialize to prevent undefined warning
           $unit   = $serving_size['unit'] ?? '';
           $unit_plural_map = [
               'cup' => 'cups',
               'slice' => 'slices',
               'piece' => 'pieces',
           ];
-
           $fixed_units = ['g', 'ml', 'tbsp'];
 
           if ($amount && $unit) {
-              if (in_array($unit, $fixed_units)) {
-                  $serving_label = $amount . ' ' . strtoupper($unit);
-              } else {
-                  $unit_label = ($amount == 1) ? $unit : ($unit_plural_map[$unit] ?? $unit . 's');
-                  $serving_label = $amount . ' ' . $unit_label;
-              }
+            if (in_array($unit, $fixed_units)) {
+              $unit_label = $unit; // ← Add this line
+              $serving_label = $amount . ' ' . $unit_label;
+            } else {
+              $unit_label = ($amount == 1) ? $unit : ($unit_plural_map[$unit] ?? $unit . 's');
+              $serving_label = $amount . ' ' . $unit_label;
+            }
           } else {
-              $serving_label = '';
+            $serving_label = '';
           }
 
-          // Nutrition values
-          $calories = $nutrition['calories'] ?? 0;
-          $protein  = $nutrition['protein'] ?? 0;
-          $carbs    = $nutrition['carbs'] ?? 0;
-          $fat      = $nutrition['fat'] ?? 0;
+          // Per serving (as provided by ACF)
+          $calories = floatval($nutrition['calories'] ?? 0);
+          $protein  = floatval($nutrition['protein'] ?? 0);
+          $carbs    = floatval($nutrition['carbs'] ?? 0);
+          $fat      = floatval($nutrition['fat'] ?? 0);
 
           // Totals
           $calories_total = $calories * $servings;
@@ -211,7 +214,8 @@
           $fat_total      = $fat * $servings;
           ?>
 
-          <div class="nutrition-label-fda">
+          <?php if ($calories || $protein || $carbs || $fat): // render nutrition label only if values are input ?>
+          <div class="nutrition-label-fda rounded">
               <h4 class="label-title">Nutrition Facts</h4>
               <table class="fda-servings">
                   <tr>
@@ -237,27 +241,30 @@
                   <tbody>
                       <tr class="border-top-bold">
                           <th>CALORIES</th>
-                          <td><?= round($calories); ?> kcal</td>
-                          <td><?= round($calories_total); ?> kcal</td>
+                          <td><?= number_format($calories, 0) ?> kcal</td>
+                          <td><?= number_format($calories_total, 0) ?> kcal</td>
                       </tr>
                       <tr class="border-top">
                           <th>PROTEIN</th>
-                          <td><?= round($protein); ?> g</td>
-                          <td><?= round($protein_total); ?> g</td>
+                          <td><?= number_format($protein, 1) ?> g</td>
+                          <td><?= number_format($protein_total, 1) ?> g</td>
                       </tr>
                       <tr>
                           <th>CARBOHYDRATES</th>
-                          <td><?= round($carbs); ?> g</td>
-                          <td><?= round($carbs_total); ?> g</td>
+                          <td><?= number_format($carbs, 1) ?> g</td>
+                          <td><?= number_format($carbs_total, 1) ?> g</td>
                       </tr>
                       <tr>
                           <th>FAT</th>
-                          <td><?= round($fat); ?> g</td>
-                          <td><?= round($fat_total); ?> g</td>
+                          <td><?= number_format($fat, 1) ?> g</td>
+                          <td><?= number_format($fat_total, 1) ?> g</td>
                       </tr>
                   </tbody>
               </table>
           </div>
+          <?php else: ?>
+              <p class="nutrition-label__fallback">Nutrition facts not available.</p>
+          <?php endif; ?>
 
         </div>
       </section>
