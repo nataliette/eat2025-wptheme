@@ -19,3 +19,4 @@ package-lock.json
 
 # Other
 .env
+.DS_Store
