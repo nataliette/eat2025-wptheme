@@ -34,60 +34,24 @@ function eat2025_print_styles() {
 }
 add_action('wp_enqueue_scripts', 'eat2025_print_styles');
 
-function eat2025_register_custom_taxonomies() {
-
-    register_taxonomy('cuisine', 'post', [
-      'label' => 'Cuisine',
-      'hierarchical' => true,
-      'public' => true,
-      'show_admin_column' => true,
-      'show_in_rest' => true,
-      'rewrite' => ['slug' => 'cuisine'],
-    ]);
-  
-    register_taxonomy('meal', 'post', [
-      'label' => 'Meal',
-      'hierarchical' => true,
-      'public' => true,
-      'show_admin_column' => true,
-      'show_in_rest' => true,
-      'rewrite' => ['slug' => 'meal'],
-    ]);
-  
-    register_taxonomy('ingredient', 'post', [
-      'label' => 'Ingredients',
-      'hierarchical' => false,
-      'public' => true,
-      'show_admin_column' => true,
-      'show_in_rest' => true,
-      'rewrite' => ['slug' => 'ingredient'],
-    ]);
-  
-    register_taxonomy('diet', 'post', [
-      'label' => 'Diet',
-      'hierarchical' => false,
-      'public' => true,
-      'show_admin_column' => true,
-      'show_in_rest' => true,
-      'rewrite' => ['slug' => 'diet'],
-    ]);
-  }
-  add_action('init', 'eat2025_register_custom_taxonomies');
 
 
-  function eat2025_enqueue_recipe_scripts() {
-    if (is_single()) {
-      wp_enqueue_script(
-        'recipe-scaler',
-        get_template_directory_uri() . '/js/recipe-scaler.js',
-        [],
-        null,
-        true // Load in footer
-      );
-    }
-  }
-  add_action('wp_enqueue_scripts', 'eat2025_enqueue_recipe_scripts');
 
-  
+// Register custom taxonomies
+require_once get_template_directory() . '/inc/taxonomies.php';
+
+// ACF custom field setup
+require_once get_template_directory() . '/inc/acf-recipe-fields.php';
+
+// Save/load ACF JSON in theme for version control
+add_filter('acf/settings/save_json', function ($path) {
+  return get_stylesheet_directory() . '/acf-json';
+});
+add_filter('acf/settings/load_json', function ($paths) {
+  $paths[] = get_stylesheet_directory() . '/acf-json';
+  return $paths;
+});
+
+
 ?>
 
